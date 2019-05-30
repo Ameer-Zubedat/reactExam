@@ -51481,7 +51481,7 @@ exports.fas = _iconsCache;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.checkUniqueUserName = exports.CheckExistsUsernameAndPassword = exports.default = exports.field = void 0;
+exports.default = exports.field = void 0;
 
 var field = function field(_ref) {
   var _ref$value = _ref.value,
@@ -51543,71 +51543,6 @@ var _default = function _default(value, name, validations) {
 };
 
 exports.default = _default;
-
-var CheckExistsUsernameAndPassword = function CheckExistsUsernameAndPassword(users, userName, password) {
-  var LoginPasswordError = [],
-      LoginUserNameError = [],
-      ValidPassword = false,
-      ValidUserName = false;
-
-  for (var i = 0; i < users.length; i++) {
-    /*if (users[i].userName == userName && users[i].password == password) {
-      ValidPassword = true, ValidUserName = true;
-      } if (users[i].userName == userName && users[i].password != password) {
-      ValidPassword = false;
-      LoginErrors.push(`Invalid Password`);
-      } if (users[i].userName != userName && users[i].password == password) {
-      ValidUserName = false;
-      LoginErrors.push(`Invalid userName`);
-    }*/
-    if (users[i].userName == userName) {
-      ValidUserName = true;
-
-      if (users[i].password == password) {
-        ValidPassword = true;
-      }
-
-      if (!ValidPassword) LoginPasswordError.push("Wrong Email or password!");
-      break;
-    }
-  }
-
-  if (userName != "" && !ValidUserName) {
-    LoginUserNameError.push("Wrong Email or password !");
-  }
-
-  return {
-    ValidPassword: ValidPassword,
-    ValidUserName: ValidUserName,
-    LoginUserNameError: LoginUserNameError,
-    LoginPasswordError: LoginPasswordError
-  };
-};
-
-exports.CheckExistsUsernameAndPassword = CheckExistsUsernameAndPassword;
-
-var checkUniqueUserName = function checkUniqueUserName(users, userName) {
-  var UniqueUserNameError = [],
-      userNameExists = false;
-
-  for (var i = 0; i < users.length; i++) {
-    if (users[i].userName == userName) {
-      userNameExists = true;
-      break;
-    }
-  }
-
-  if (userName != "" && userNameExists) {
-    UniqueUserNameError.push("userName Exists");
-  }
-
-  return {
-    userNameExists: userNameExists,
-    UniqueUserNameError: UniqueUserNameError
-  };
-};
-
-exports.checkUniqueUserName = checkUniqueUserName;
 },{}],"TaskOneContactForm.js":[function(require,module,exports) {
 "use strict";
 
@@ -51624,13 +51559,17 @@ var _reactBootstrap = require("react-bootstrap");
 
 var _freeSolidSvgIcons = require("@fortawesome/free-solid-svg-icons");
 
-var _validator = _interopRequireWildcard(require("./validator"));
+var _validator2 = _interopRequireWildcard(require("./validator"));
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -51640,9 +51579,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
@@ -51654,12 +51593,67 @@ function (_React$Component) {
   _inherits(TaskOneContactForm, _React$Component);
 
   function TaskOneContactForm() {
+    var _this;
+
     _classCallCheck(this, TaskOneContactForm);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(TaskOneContactForm).apply(this, arguments));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(TaskOneContactForm).call(this));
+    _this.state = {
+      Name: (0, _validator2.field)({
+        value: '',
+        name: 'Name',
+        minLength: 2
+      }),
+      CellularPhone: (0, _validator2.field)({
+        value: '',
+        name: 'CellularPhone',
+        pattern: /^05\d([-]{0,1})\d{7}$/
+      }),
+      How: (0, _validator2.field)({
+        value: '',
+        name: 'How'
+      })
+    };
+    _this.onInputChange = _this.onInputChange.bind(_assertThisInitialized(_this));
+    _this.onSubmit = _this.onSubmit.bind(_assertThisInitialized(_this));
+    return _this;
   }
 
   _createClass(TaskOneContactForm, [{
+    key: "onInputChange",
+    value: function onInputChange(_ref) {
+      var _ref$target = _ref.target,
+          name = _ref$target.name,
+          value = _ref$target.value;
+      console.log(name, value);
+      this.setState(_defineProperty({}, name, _objectSpread({}, this.state[name], {
+        value: value
+      }, (0, _validator2.default)(value, name, this.state[name].validations))));
+    }
+  }, {
+    key: "onSubmit",
+    value: function onSubmit(e) {
+      e.preventDefault();
+      var user = Object.assign({}, this.state);
+
+      for (var key in user) {
+        var _user$key = user[key],
+            value = _user$key.value,
+            validations = _user$key.validations;
+
+        var _validator = (0, _validator2.default)(value, key, validations),
+            valid = _validator.valid,
+            errors = _validator.errors;
+
+        if (!valid) {
+          user[key].valid = valid;
+          user[key].errors = errors;
+        }
+      }
+
+      this.setState(_objectSpread({}, user));
+    }
+  }, {
     key: "render",
     value: function render() {
       return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", {
@@ -51668,7 +51662,8 @@ function (_React$Component) {
         style: {
           height: 250,
           margin: "80px 300px  0px 300px"
-        }
+        },
+        onSubmit: this.onSubmit
       }, _react.default.createElement("h1", {
         style: {
           color: "red",
@@ -51685,18 +51680,31 @@ function (_React$Component) {
       }))), _react.default.createElement(_reactBootstrap.Form.Control, {
         id: "Name",
         name: "Name",
-        placeholder: "Enter Your Name"
-      }))), _react.default.createElement(_reactBootstrap.Form.Group, null, _react.default.createElement(_reactBootstrap.Form.Label, {
+        placeholder: "Enter Your Name",
+        onBlur: this.onInputChange
+      })), this.state.Name.errors.map(function (err, i) {
+        return _react.default.createElement(_reactBootstrap.Form.Text, {
+          key: i,
+          className: "text-danger"
+        }, err);
+      })), _react.default.createElement(_reactBootstrap.Form.Group, null, _react.default.createElement(_reactBootstrap.Form.Label, {
         className: "font-weight-bold"
       }, " Cellular Phone"), _react.default.createElement(_reactBootstrap.InputGroup, {
         className: "mb-3"
       }, _react.default.createElement(_reactBootstrap.InputGroup.Prepend, null, _react.default.createElement(_reactBootstrap.InputGroup.Text, null, _react.default.createElement(_reactFontawesome.FontAwesomeIcon, {
         icon: _freeSolidSvgIcons.faPhone
       }))), _react.default.createElement(_reactBootstrap.Form.Control, {
-        id: " CellularPhone",
-        name: " CellularPhone",
-        placeholder: "Enter  Cellular Phone"
-      }))), _react.default.createElement(_reactBootstrap.Form.Group, null, _react.default.createElement(_reactBootstrap.Form.Label, {
+        id: "CellularPhone",
+        name: "CellularPhone",
+        type: "phone",
+        placeholder: "Enter  Cellular Phone",
+        onBlur: this.onInputChange
+      })), this.state.CellularPhone.errors.map(function (err, i) {
+        return _react.default.createElement(_reactBootstrap.Form.Text, {
+          key: i,
+          className: "text-danger"
+        }, err);
+      })), _react.default.createElement(_reactBootstrap.Form.Group, null, _react.default.createElement(_reactBootstrap.Form.Label, {
         className: "font-weight-bold"
       }, "How did you reached us"), _react.default.createElement(_reactBootstrap.InputGroup, {
         className: "mb-3"
@@ -51705,7 +51713,8 @@ function (_React$Component) {
       }))), _react.default.createElement(_reactBootstrap.Form.Control, {
         as: "select",
         id: "How",
-        name: "How"
+        name: "How",
+        onBlur: this.onInputChange
       }, _react.default.createElement("option", {
         value: ""
       }, "How did you reached us?"), _react.default.createElement("option", {
@@ -51716,7 +51725,12 @@ function (_React$Component) {
         value: "Birthday"
       }, "Friends"), _react.default.createElement("option", {
         value: "Party"
-      }, "Social Media")))), _react.default.createElement(_reactBootstrap.Button, {
+      }, "Social Media"))), this.state.How.errors.map(function (err, i) {
+        return _react.default.createElement(_reactBootstrap.Form.Text, {
+          key: i,
+          className: "text-danger"
+        }, err);
+      })), _react.default.createElement(_reactBootstrap.Button, {
         className: "font-weight-bold",
         variant: "primary",
         style: {
@@ -51817,7 +51831,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63621" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63837" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
