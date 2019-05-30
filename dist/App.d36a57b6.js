@@ -51475,7 +51475,33 @@ var _iconsCache = {
   faYinYang: faYinYang
 };
 exports.fas = _iconsCache;
-},{}],"validator.js":[function(require,module,exports) {
+},{}],"UserDetails.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _reactBootstrap = require("react-bootstrap");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _default = function _default(_ref) {
+  var Name = _ref.Name,
+      Phone = _ref.Phone,
+      How = _ref.How;
+  return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement(_reactBootstrap.Table, {
+    striped: true,
+    bordered: true,
+    hover: true
+  }, _react.default.createElement("thead", null, _react.default.createElement("tr", null, _react.default.createElement("th", null, "#"), _react.default.createElement("th", null, "Name"), _react.default.createElement("th", null, "Cellular Phone"), _react.default.createElement("th", null, "How did you reached us ?"))), _react.default.createElement("tbody", null, _react.default.createElement("tr", null, _react.default.createElement("td", null, "1"), _react.default.createElement("td", null, Name), _react.default.createElement("td", null, Phone), _react.default.createElement("td", null, How)))));
+};
+
+exports.default = _default;
+},{"react":"node_modules/react/index.js","react-bootstrap":"node_modules/react-bootstrap/es/index.js"}],"validator.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -51559,6 +51585,8 @@ var _reactBootstrap = require("react-bootstrap");
 
 var _freeSolidSvgIcons = require("@fortawesome/free-solid-svg-icons");
 
+var _UserDetails = _interopRequireDefault(require("./UserDetails"));
+
 var _validator2 = _interopRequireWildcard(require("./validator"));
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
@@ -51612,7 +51640,8 @@ function (_React$Component) {
       How: (0, _validator2.field)({
         value: '',
         name: 'How'
-      })
+      }),
+      flag: false
     };
     _this.onInputChange = _this.onInputChange.bind(_assertThisInitialized(_this));
     _this.onSubmit = _this.onSubmit.bind(_assertThisInitialized(_this));
@@ -51637,26 +51666,34 @@ function (_React$Component) {
       var user = Object.assign({}, this.state);
 
       for (var key in user) {
-        var _user$key = user[key],
-            value = _user$key.value,
-            validations = _user$key.validations;
+        if (key != "flag") {
+          var _user$key = user[key],
+              value = _user$key.value,
+              validations = _user$key.validations;
 
-        var _validator = (0, _validator2.default)(value, key, validations),
-            valid = _validator.valid,
-            errors = _validator.errors;
+          var _validator = (0, _validator2.default)(value, key, validations),
+              valid = _validator.valid,
+              errors = _validator.errors;
 
-        if (!valid) {
-          user[key].valid = valid;
-          user[key].errors = errors;
+          if (!valid) {
+            user[key].valid = valid;
+            user[key].errors = errors;
+          }
         }
       }
 
       this.setState(_objectSpread({}, user));
+
+      if (this.state.Name.errors.length == 0 && this.state.CellularPhone.errors.length == 0 && this.state.How.errors.length == 0) {
+        this.setState({
+          flag: true
+        });
+      }
     }
   }, {
     key: "render",
     value: function render() {
-      return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", {
+      return _react.default.createElement(_react.default.Fragment, null, !this.state.flag ? _react.default.createElement("div", {
         className: "container"
       }, _react.default.createElement(_reactBootstrap.Form, {
         style: {
@@ -51718,13 +51755,13 @@ function (_React$Component) {
       }, _react.default.createElement("option", {
         value: ""
       }, "How did you reached us?"), _react.default.createElement("option", {
-        value: "New Born"
+        value: "Advertisment"
       }, "Advertisment"), _react.default.createElement("option", {
-        value: "Wedding"
+        value: "News"
       }, "News"), _react.default.createElement("option", {
-        value: "Birthday"
+        value: "Friends"
       }, "Friends"), _react.default.createElement("option", {
-        value: "Party"
+        value: "Social Media"
       }, "Social Media"))), this.state.How.errors.map(function (err, i) {
         return _react.default.createElement(_reactBootstrap.Form.Text, {
           key: i,
@@ -51737,7 +51774,11 @@ function (_React$Component) {
           border: "2px solid white"
         },
         type: "submit"
-      }, "Submit"))));
+      }, "Submit"))) : _react.default.createElement(_UserDetails.default, {
+        Name: this.state.Name.value,
+        Phone: this.state.CellularPhone.value,
+        How: this.state.How.value
+      }));
     }
   }]);
 
@@ -51745,7 +51786,7 @@ function (_React$Component) {
 }(_react.default.Component);
 
 exports.default = TaskOneContactForm;
-},{"react":"node_modules/react/index.js","@fortawesome/react-fontawesome":"node_modules/@fortawesome/react-fontawesome/index.es.js","react-bootstrap":"node_modules/react-bootstrap/es/index.js","@fortawesome/free-solid-svg-icons":"node_modules/@fortawesome/free-solid-svg-icons/index.es.js","./validator":"validator.js"}],"App.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","@fortawesome/react-fontawesome":"node_modules/@fortawesome/react-fontawesome/index.es.js","react-bootstrap":"node_modules/react-bootstrap/es/index.js","@fortawesome/free-solid-svg-icons":"node_modules/@fortawesome/free-solid-svg-icons/index.es.js","./UserDetails":"UserDetails.js","./validator":"validator.js"}],"App.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

@@ -1,17 +1,18 @@
 import React from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Form, InputGroup, Button } from "react-bootstrap";
-import {faPhone,faTag, faList } from "@fortawesome/free-solid-svg-icons";
-
+import { faPhone, faTag, faList } from "@fortawesome/free-solid-svg-icons";
+import UserDetails from './UserDetails';
 import validator, { field } from './validator';
 
 export default class TaskOneContactForm extends React.Component {
-    constructor(){
+    constructor() {
         super();
         this.state = {
-            Name: field({ value: '', name: 'Name',minLength: 2 }),
-            CellularPhone: field({ value: '', name: 'CellularPhone',pattern:/^05\d([-]{0,1})\d{7}$/ }),
+            Name: field({ value: '', name: 'Name', minLength: 2 }),
+            CellularPhone: field({ value: '', name: 'CellularPhone', pattern: /^05\d([-]{0,1})\d{7}$/ }),
             How: field({ value: '', name: 'How' }),
+            flag: false
         }
         this.onInputChange = this.onInputChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
@@ -30,21 +31,26 @@ export default class TaskOneContactForm extends React.Component {
         e.preventDefault();
         const user = Object.assign({}, this.state);
         for (let key in user) {
-            const { value, validations } = user[key];
-            const { valid, errors } = validator(value, key, validations);
-            if (!valid) {
-              user[key].valid = valid;
-              user[key].errors = errors;
+            if (key != "flag") {
+                const { value, validations } = user[key];
+                const { valid, errors } = validator(value, key, validations);
+                if (!valid) {
+                    user[key].valid = valid;
+                    user[key].errors = errors;
+                }
             }
         }
         this.setState({ ...user });
+        if (this.state.Name.errors.length == 0 && this.state.CellularPhone.errors.length == 0 && this.state.How.errors.length == 0) {
+            this.setState({ flag: true });
+        }
     }
     render() {
 
         return <>
-            <div className="container" >
+            {!this.state.flag ? <div className="container" >
                 <Form style={{ height: 250, margin: "80px 300px  0px 300px" }} onSubmit={this.onSubmit} >
-                    <h1 style={{ color: "red" ,textAlign:"center",marginBottom:"50px"}} className="font-weight-bold">Contact Form</h1>
+                    <h1 style={{ color: "red", textAlign: "center", marginBottom: "50px" }} className="font-weight-bold">Contact Form</h1>
                     <Form.Group>
                         <Form.Label className="font-weight-bold">Name</Form.Label>
                         <InputGroup className="mb-3">
@@ -103,10 +109,10 @@ export default class TaskOneContactForm extends React.Component {
                                 onBlur={this.onInputChange}
                             >
                                 <option value="">How did you reached us?</option>
-                                <option value="New Born">Advertisment</option>
-                                <option value="Wedding">News</option>
-                                <option value="Birthday">Friends</option>
-                                <option value="Party">Social Media</option>
+                                <option value="Advertisment">Advertisment</option>
+                                <option value="News">News</option>
+                                <option value="Friends">Friends</option>
+                                <option value="Social Media">Social Media</option>
                             </Form.Control>
                         </InputGroup>
                         {this.state.How.errors.map((err, i) => (
@@ -117,7 +123,7 @@ export default class TaskOneContactForm extends React.Component {
                     </Form.Group>
                     <Button className="font-weight-bold" variant="primary" style={{ border: "2px solid white" }} type="submit">Submit</Button>
                 </Form>
-            </div>
+            </div> : <UserDetails Name={this.state.Name.value} Phone={this.state.CellularPhone.value} How={this.state.How.value} />}
         </>;
     }
 }
